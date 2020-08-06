@@ -9,10 +9,12 @@ import random
 from getpass import getpass
 from typing import Union, Dict
 
+import splash
 import requests
 from bs4 import BeautifulSoup
 
 
+SPLASH_HTML_RENDER_URL = 'http://ndawn.ru:8050/render.html'
 PROXY_LIST_URL = 'https://premproxy.com/ru/proxy-by-country/list-ip-port/%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F-01.htm'
 AUTH_URL = 'https://elibrary.ru/start_session.asp'
 AUTHOR_LIST_URL = 'https://elibrary.ru/authors.asp'
@@ -265,19 +267,19 @@ def get_author_refs(author):
 if __name__ == '__main__':
     atexit.register(CONFIG.save_cookies)
 
-    CONFIG.session.proxies['http'] = CONFIG.session.proxies['https'] = 'socks5h://localhost:9050'
+    # CONFIG.session.proxies['http'] = CONFIG.session.proxies['https'] = 'socks5h://localhost:9050'
 
-    # while True:
-    #     use_proxy = input('Использовать прокси? [Y/n]: ').lower().strip()
-    #
-    #     if use_proxy in ('y', ''):
-    #         CONFIG.proxies = {'https': input('Введите адрес прокси в формате "<протокол>://<адрес>[:<порт>]": ')}
-    #
-    #         print(f"Текущий адрес прокси: {CONFIG.proxies['https']}")
-    #
-    #         break
-    #     elif use_proxy == 'n':
-    #         break
+    while True:
+        use_proxy = input('Использовать прокси? [Y/n]: ').lower().strip()
+
+        if use_proxy in ('y', ''):
+            CONFIG.proxies = {'https': input('Введите адрес прокси в формате "<протокол>://<адрес>[:<порт>]": ')}
+
+            print(f"Текущий адрес прокси: {CONFIG.proxies['https']}")
+
+            break
+        elif use_proxy == 'n':
+            break
 
     if 'SCookieID' not in CONFIG.cookies and 'SUserID' not in CONFIG.cookies:
         authenticate(**prompt_login())
